@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-var mexp = require('math-expression-evaluator');
-
 
 class Calculator extends Component {
 
@@ -8,48 +6,98 @@ class Calculator extends Component {
         super();
         this.state = {
             exp: "",
-            equalPressed: false
+            clear: false,
+            error: "",
+            displayError: false
         }; 
     }
     
+    isOperator(str) {
+        return (str === "+" || str === "-" || str === "*" || str === "/");
+    }
+
+    isNumber (str)  {
+        return Number.isInteger(parseInt(str, 10));
+    }
+    
+    isControl (str) {
+        return (str === "<" || str === "C" || str === "=");
+    }
+
+    clearState() {
+        return {exp: "", clear: false};
+    }
 
     handleClick = (e) => {
-        console.log(e.target);
-        if (e.target.innerText === "<") {
-            var strwithLastCharRemoved = this.state.exp.substring(0, this.state.exp.length - 1);
-            this.setState({exp: strwithLastCharRemoved});
-        } else if(e.target.innerText !== "=" && !this.state.equalPressed) {
-            var concatExp = this.state.exp + e.target.innerText;
-            this.setState({exp: concatExp});
-        } else if(e.target.innerText !== "=" && this.state.equalPressed) {
-            this.setState({exp: ""});
-            var concatExp = e.target.innerText;
-            this.setState({exp: concatExp});
-            this.setState({equalPressed: false});
-            console.log("if 2: " + this.state.equalPressed);
-        } else {
-            try {
-                this.setState({equalPressed: true});
-                var value = eval(this.state.exp);
-                this.setState({exp: value});
-                console.log(value);
-            } catch (error) {
-                console.log(error);
+        if(e.target.tagName === "BUTTON" || e.target.tagName === "SPAN") {
+            let nextState = this.state;
+            if(this.isControl(e.target.innerText)) {
+                if(e.target.innerText === "<") {
+                    var strwithLastCharRemoved = this.state.exp.substring(0, this.state.exp.length - 1);
+                    if(strwithLastCharRemoved === "") {
+                        nextState['displayError'] = false;
+                        nextState['error'] = "";
+                    }
+                    nextState = {exp: strwithLastCharRemoved};
+                    
+                } else if(e.target.innerText === "C") {
+                    nextState = this.clearState();
+                } else { // equal was pressed
+                    try {
+                        var value = eval(this.state.exp);
+                        nextState = {exp: String(value), 
+                            clear: true, 
+                            displayError: false, 
+                            error: ""
+                        };
+
+                    } catch (error) {
+                        var msg = error.message;
+                        nextState = {displayError: true, error: msg};
+                    }
+                    
+                }
+            } else {
+
+                if((this.isNumber(e.target.innerText) || e.target.innerText === "." || e.target.innerText === "(")  && this.state.clear) {
+                    nextState = this.clearState();
+                }
+
+                if(nextState["exp"].indexOf(".") !== -1 && e.target.innerText === ".") {
+                    return;
+                }
+
+                if(this.isOperator(e.target.innerText) ||  e.target.innerText === ")") {
+                    let lastCharacter = nextState.exp.slice(-1);
+                    if(this.isOperator(lastCharacter) 
+                        || lastCharacter === "" || lastCharacter === "(") {
+                            return;
+                    } else {
+                        nextState["clear"] = false;
+                    }
+                }
+
+                if(e.target.innerText === ")" && nextState["exp"].indexOf("(") === -1) {
+                    return;
+                }
+                let concat = nextState.exp + e.target.innerText;
+                nextState["exp"] = concat;
             }
+        this.setState(nextState);
+        this.props.callbackFromParent(nextState['exp']);
         }
 
-        
     }
 
     render() {
     return (
     <div className="btn-toolbar calculator" role="toolbar" aria-label="Toolbar with button groups">
-            
+            <p className={(this.state.displayError ? "help-block" : "hideError")}>{this.state.error}</p>
             <input type="text" className="form-control input-visor" readOnly="readonly" value={this.state.exp}/>
             
             <div onClick={this.handleClick}>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc first-corner-top"><span className="btn-text">&lt;</span></button> 
+                    <button type="button" className="btn btn-default btn-calc first-corner-top"><span id="clearBack" className="btn-text">{this.state.clear ? 'C' : '<'}</span></button> 
                     <button type="button" className="btn btn-default btn-calc"><span className="btn-text">(</span></button> 
                     <button type="button" className="btn btn-default btn-calc last last-corner-top"><span className="btn-text">)</span></button> 
                 </div>

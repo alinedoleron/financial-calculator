@@ -40,9 +40,19 @@ header {
     }
 }
 
+.help-block {
+    visibility: visible;
+    opacity: 1;
+    color: $red-fail;
+    margin-top: 34px;
+}
+
+.hideError {
+    opacity: 0;
+    margin-top: 64px;
+}
 
 .input-visor {
-    margin-top: 61px;
     margin-bottom: 9px;
     width: 202px;
     height: 56px;
