@@ -29,10 +29,11 @@ class Calculator extends Component {
     }
 
     handleClick = (e) => {
+        console.log(e.target.textContent);
         if(e.target.tagName === "BUTTON" || e.target.tagName === "SPAN") {
             let nextState = this.state;
-            if(this.isControl(e.target.innerText)) {
-                if(e.target.innerText === "<") {
+            if(this.isControl(e.target.textContent)) {
+                if(e.target.textContent === "<") {
                     var strwithLastCharRemoved = this.state.exp.substring(0, this.state.exp.length - 1);
                     if(strwithLastCharRemoved === "") {
                         nextState['displayError'] = false;
@@ -40,17 +41,19 @@ class Calculator extends Component {
                     }
                     nextState = {exp: strwithLastCharRemoved};
                     
-                } else if(e.target.innerText === "C") {
+                } else if(e.target.textContent === "C") {
                     nextState = this.clearState();
                 } else { // equal was pressed
                     try {
-                        var value = eval(this.state.exp);
-                        nextState = {exp: String(value), 
-                            clear: true, 
-                            displayError: false, 
-                            error: ""
-                        };
-
+                        if(this.state.exp !== "") {
+                            var value = eval(this.state.exp);
+                            nextState = {exp: String(value), 
+                                clear: true, 
+                                displayError: false, 
+                                error: ""
+                                };
+                        }
+                        
                     } catch (error) {
                         var msg = error.message;
                         nextState = {displayError: true, error: msg};
@@ -59,15 +62,15 @@ class Calculator extends Component {
                 }
             } else {
 
-                if((this.isNumber(e.target.innerText) || e.target.innerText === "." || e.target.innerText === "(")  && this.state.clear) {
+                if((this.isNumber(e.target.textContent) || e.target.textContent === "." || e.target.textContent === "(")  && this.state.clear) {
                     nextState = this.clearState();
                 }
 
-                if(nextState["exp"].indexOf(".") !== -1 && e.target.innerText === ".") {
+                if(nextState["exp"].indexOf(".") !== -1 && e.target.textContent === ".") {
                     return;
                 }
 
-                if(this.isOperator(e.target.innerText) ||  e.target.innerText === ")") {
+                if(this.isOperator(e.target.textContent) ||  e.target.textContent === ")") {
                     let lastCharacter = nextState.exp.slice(-1);
                     if(this.isOperator(lastCharacter) 
                         || lastCharacter === "" || lastCharacter === "(") {
@@ -77,12 +80,13 @@ class Calculator extends Component {
                     }
                 }
 
-                if(e.target.innerText === ")" && nextState["exp"].indexOf("(") === -1) {
+                if(e.target.textContent === ")" && nextState["exp"].indexOf("(") === -1) {
                     return;
                 }
-                let concat = nextState.exp + e.target.innerText;
+                let concat = nextState.exp + e.target.textContent;
                 nextState["exp"] = concat;
             }
+        console.log(nextState);
         this.setState(nextState);
         this.props.callbackFromParent(nextState['exp']);
         }
@@ -98,27 +102,27 @@ class Calculator extends Component {
             <div onClick={this.handleClick}>
                 <div className="btn-group calc-line" role="group"> 
                     <button type="button" className="btn btn-default btn-calc first-corner-top"><span id="clearBack" className="btn-text">{this.state.clear ? 'C' : '<'}</span></button> 
-                    <button type="button" className="btn btn-default btn-calc"><span className="btn-text">(</span></button> 
-                    <button type="button" className="btn btn-default btn-calc last last-corner-top"><span className="btn-text">)</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor"><span className="btn-text">(</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor last last-corner-top"><span className="btn-text">)</span></button> 
                 </div>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc first-middle" ><span className="btn-text">1</span></button> 
-                    <button type="button" className="btn btn-default btn-calc"><span className="btn-text">2</span></button> 
-                    <button type="button" className="btn btn-default btn-calc last last-middle"><span className="btn-text">3</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor first-middle" ><span className="btn-text">1</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor "><span className="btn-text">2</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor  last last-middle"><span className="btn-text">3</span></button> 
                 </div>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc first-middle"><span className="btn-text">4</span></button> 
-                    <button type="button" className="btn btn-default btn-calc"><span className="btn-text">5</span></button> 
-                    <button type="button" className="btn btn-default btn-calc last last-middle"><span className="btn-text">6</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor  first-middle"><span className="btn-text">4</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor"><span className="btn-text">5</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor last last-middle"><span className="btn-text">6</span></button> 
                 </div>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc first-middle"><span className="btn-text">7</span></button> 
-                    <button type="button" className="btn btn-default btn-calc"><span className="btn-text">8</span></button> 
-                    <button type="button" className="btn btn-default btn-calc last last-middle"><span className="btn-text">9</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor first-middle"><span className="btn-text">7</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor"><span className="btn-text">8</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor  last last-middle"><span className="btn-text">9</span></button> 
                 </div>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc btn-zero first-corner-bottom"><span className="btn-text">0</span></button> 
-                    <button type="button" className="btn btn-default btn-calc last last-corner-bottom"><span className="btn-text dot">.</span></button>
+                    <button type="button" className="btn btn-default btn-calc btn-visor btn-zero first-corner-bottom"><span className="btn-text">0</span></button> 
+                    <button type="button" className="btn btn-default btn-calc btn-visor last last-corner-bottom"><span className="btn-text dot">.</span></button>
                 </div>
 
 

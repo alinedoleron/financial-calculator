@@ -13,14 +13,14 @@ class FormContainer extends Component {
       }
 
     }
-    myCallback = (exp) => {
+    getLoan = (exp) => {
         this.setState({loan: exp});
     }
 
   render() {
     return (
       <div className="container_form">
-        <Calculator callbackFromParent={this.myCallback}></Calculator>
+        <Calculator callbackFromParent={this.getLoan}></Calculator>
         <CalculatorForm initialValue={this.state.loan}></CalculatorForm>
         
       </div>
