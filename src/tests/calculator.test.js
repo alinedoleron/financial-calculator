@@ -14,7 +14,7 @@ test('should render a character(number, dot or parenthesis) when it was clicked'
 });
 
 test('should not allow a signal before a number', () => {
-    const calculator = mount(<Calculator callbackFromParent={() => {console.log();}} />);
+    const calculator = mount(<Calculator callbackFromParent={() => {}} />);
 
     let buttonOperator = calculator.find('.btn-signal').first();
     let buttonNumber = calculator.findWhere((n) => n.hasClass('btn-visor') && n.text() == '2');
@@ -28,7 +28,7 @@ test('should not allow a signal before a number', () => {
 });
 
 test('should not allow a sequence of signal operators', () => {
-    const calculator = mount(<Calculator callbackFromParent={() => {console.log();}} />);
+    const calculator = mount(<Calculator callbackFromParent={() => {}} />);
 
     let buttonNumberA = calculator.findWhere((n) => n.hasClass('btn-visor') && n.text() == '2');
     let buttonOperator = calculator.find('.btn-signal').first();
@@ -47,7 +47,7 @@ test('should not allow a sequence of signal operators', () => {
 });
 
 test('should show the result of an arithmetic operation when = is pressed', () => {
-    const calculator = mount(<Calculator callbackFromParent={() => {console.log();}} />);
+    const calculator = mount(<Calculator callbackFromParent={() => {}} />);
 
     let buttonNumberA = calculator.findWhere((n) => n.hasClass('btn-visor') && n.text() == '4');
     let buttonOperator = calculator.findWhere((n) => n.hasClass('btn-signal') && n.text() == '+');
@@ -62,11 +62,11 @@ test('should show the result of an arithmetic operation when = is pressed', () =
     buttonNumberB.simulate('click');
     buttonEqual.simulate('click');
 
-    expect(calculator.find('.input-visor').props().value).toEqual("7");
+    expect(calculator.find('.input-visor').props().value).toEqual(7);
 });
 
 test('should show the C button after executing an arithmetic operation when = is pressed', () => {
-    const calculator = mount(<Calculator callbackFromParent={() => {console.log();}} />);
+    const calculator = mount(<Calculator callbackFromParent={() => {}} />);
 
     let buttonNumberA = calculator.findWhere((n) => n.hasClass('btn-visor') && n.text() == '4');
     let buttonOperator = calculator.findWhere((n) => n.hasClass('btn-signal') && n.text() == '+');
@@ -86,7 +86,7 @@ test('should show the C button after executing an arithmetic operation when = is
 
 
 test('should remove the last character when < is pressed', () => {
-    const calculator = mount(<Calculator callbackFromParent={() => {console.log();}} />);
+    const calculator = mount(<Calculator callbackFromParent={() => {}} />);
 
     let buttonNumberA = calculator.findWhere((n) => n.hasClass('btn-visor') && n.text() == '4');
     let buttonOperator = calculator.findWhere((n) => n.hasClass('btn-signal') && n.text() == '+');

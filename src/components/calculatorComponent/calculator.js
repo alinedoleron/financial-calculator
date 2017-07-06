@@ -12,6 +12,29 @@ class Calculator extends Component {
         }; 
     }
     
+    clickEqual = (updateState = false) => {
+        let nextState = {};
+        try {
+            if(this.state.exp !== "") {
+                var value = eval(this.state.exp);
+                nextState = {exp: value, 
+                    clear: true, 
+                    displayError: false, 
+                    error: ""
+                    };
+            }
+            
+        } catch (error) {
+            var msg = error.message;
+            nextState = {displayError: true, error: msg};
+        }
+        if(updateState) {
+            this.setState(nextState);
+        }
+        this.props.callbackFromParent(nextState['exp']);
+        return nextState;
+    }
+
     isOperator(str) {
         return (str === "+" || str === "-" || str === "*" || str === "/");
     }
@@ -29,7 +52,6 @@ class Calculator extends Component {
     }
 
     handleClick = (e) => {
-        console.log(e.target.textContent);
         if(e.target.tagName === "BUTTON" || e.target.tagName === "SPAN") {
             let nextState = this.state;
             if(this.isControl(e.target.textContent)) {
@@ -43,22 +65,9 @@ class Calculator extends Component {
                     
                 } else if(e.target.textContent === "C") {
                     nextState = this.clearState();
+                    this.props.callbackFromParent(0);
                 } else { // equal was pressed
-                    try {
-                        if(this.state.exp !== "") {
-                            var value = eval(this.state.exp);
-                            nextState = {exp: String(value), 
-                                clear: true, 
-                                displayError: false, 
-                                error: ""
-                                };
-                        }
-                        
-                    } catch (error) {
-                        var msg = error.message;
-                        nextState = {displayError: true, error: msg};
-                    }
-                    
+                    nextState = this.clickEqual();
                 }
             } else {
 
@@ -66,7 +75,7 @@ class Calculator extends Component {
                     nextState = this.clearState();
                 }
 
-                if(nextState["exp"].indexOf(".") !== -1 && e.target.textContent === ".") {
+                if(nextState.exp.slice(-1) === "." && e.target.textContent === ".") {
                     return;
                 }
 
@@ -86,9 +95,7 @@ class Calculator extends Component {
                 let concat = nextState.exp + e.target.textContent;
                 nextState["exp"] = concat;
             }
-        console.log(nextState);
         this.setState(nextState);
-        this.props.callbackFromParent(nextState['exp']);
         }
 
     }

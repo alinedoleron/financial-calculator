@@ -183,7 +183,7 @@ header {
     box-shadow: 0 0 20px 0 rgba(0, 5, 61, 0.1);
     margin: 0 auto;
     top: 25%;
-    display: flex;
+    display: inline-flex;
 }
 
 .form-labels {
@@ -200,43 +200,61 @@ header {
     }
 }
 
-.box {
+.btn-dropdown {
     width: 291px;
     margin-bottom: 24.1px;
     position: relative;
-    select {
-        border-radius: 4px;
-        border: 0;
-        height: 40px;
-        background-color: $gray-visor;
-        box-shadow: none;
-        appearance: none;
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 16px;
-        font-weight: 600;
-        color: $gray-selector-text-050;
-        padding: 6px 10px;
-    }
+    border-radius: 4px;
+    border: 0;
+    height: 40px;
+    background-color: $gray-visor;
+    box-shadow: none;
+    appearance: none;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: $gray-selector-text-050;
+    padding: 6px 10px;
+    text-align: left;
+}
+
+.btn-dropdown:hover, .btn-dropdown:focus, .btn-dropdown:active {
+    color: $gray-selector-text-050;
+    border: solid 1px $blue-box;
+    cursor: text;
+
+}
+
+
+.btn-options {
+     width: 291px;
+     margin-top: 40px;
+     color: $gray-option;
+     
+
+     .btn-option {
+        padding: 6px 24.6px;
+     }
+
+     .btn-option:hover {
+         background-color: $gray-li;
+     }
 }
 
 .select-side {
-    pointer-events: none;
-    width: 13px;
     position: absolute;
-    top: 6px;
-    height: 15px;
-    margin-left: 153px; 
+    margin-left: 265px; 
+    top: 8px;
     display: flex;
     flex-wrap: wrap;
-    left: 120px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
+    width: 7.1px;
+    height: 11.2px;
 
-    i {
-      height: 8px;
-      top: 4px;
-      font-size: .6em; 
-      color: $gray-selector-arrow;
+    span {
+        width: 7.1px;
+        top: 4px;
+        font-size: .5em; 
+        color: $gray-selector-arrow;
     }
 }
 

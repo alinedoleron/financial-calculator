@@ -13,15 +13,15 @@ class FormContainer extends Component {
       }
 
     }
-    getLoan = (exp) => {
+    setLoan = (exp) => {
         this.setState({loan: exp});
     }
 
   render() {
     return (
       <div className="container_form">
-        <Calculator callbackFromParent={this.getLoan}></Calculator>
-        <CalculatorForm initialValue={this.state.loan}></CalculatorForm>
+        <Calculator ref="calc" callbackFromParent={this.setLoan}></Calculator>
+        <CalculatorForm initialValue={this.state.loan} equalMethod={() => this.refs.calc.clickEqual(true)}></CalculatorForm>
         
       </div>
     );
