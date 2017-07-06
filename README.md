@@ -16,6 +16,9 @@ These instructions tell the prerequisites and show how to run the project on you
 **Node**
   
  - Install Node: https://nodejs.org/en/
+ - To install the dependencies, run: 
+
+> npm install
 
 ## Running
 
