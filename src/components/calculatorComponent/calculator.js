@@ -24,14 +24,20 @@ class Calculator extends Component {
                     };
             }
             
+            
         } catch (error) {
             var msg = error.message;
             nextState = {displayError: true, error: msg};
         }
+
+        if(Math.sign(nextState.exp) === -1) {
+            nextState = {exp: value, clear: true, displayError: true, error: "Loan cannot be negative"};
+        }
+
         if(updateState) {
             this.setState(nextState);
         }
-        this.props.callbackFromParent(nextState['exp']);
+        this.props.sendInputVisorToParent(nextState['exp']);
         return nextState;
     }
 
@@ -48,7 +54,7 @@ class Calculator extends Component {
     }
 
     clearState() {
-        return {exp: "", clear: false};
+        return {exp: "", clear: false, displayError: false, error: ""};
     }
 
     handleClick = (e) => {
@@ -65,7 +71,7 @@ class Calculator extends Component {
                     
                 } else if(e.target.textContent === "C") {
                     nextState = this.clearState();
-                    this.props.callbackFromParent(0);
+                    this.props.sendInputVisorToParent(0);
                 } else { // equal was pressed
                     nextState = this.clickEqual();
                 }
@@ -76,6 +82,10 @@ class Calculator extends Component {
                 }
 
                 if(nextState.exp.slice(-1) === "." && e.target.textContent === ".") {
+                    return;
+                }
+
+                if(nextState.exp.slice(-1) === "" && e.target.textContent === "0") {
                     return;
                 }
 
@@ -104,11 +114,11 @@ class Calculator extends Component {
     return (
     <div className="btn-toolbar calculator" role="toolbar" aria-label="Toolbar with button groups">
             <p className={(this.state.displayError ? "help-block" : "hideError")}>{this.state.error}</p>
-            <input type="text" className="form-control input-visor" readOnly="readonly" value={this.state.exp}/>
+            <input type="text" className={(this.state.displayError ? "input-error form-control input-visor" : "input-visor form-control")} readOnly="readonly" value={this.state.exp}/>
             
             <div onClick={this.handleClick}>
                 <div className="btn-group calc-line" role="group"> 
-                    <button type="button" className="btn btn-default btn-calc first-corner-top"><span id="clearBack" className="btn-text">{this.state.clear ? 'C' : '<'}</span></button> 
+                    <button type="button" className="btn btn-default btn-calc first-corner-top"><span id="clearBack" className="btn-text">{(this.state.clear || this.state.displayError) ? 'C' : '<'}</span></button> 
                     <button type="button" className="btn btn-default btn-calc btn-visor"><span className="btn-text">(</span></button> 
                     <button type="button" className="btn btn-default btn-calc btn-visor last last-corner-top"><span className="btn-text">)</span></button> 
                 </div>

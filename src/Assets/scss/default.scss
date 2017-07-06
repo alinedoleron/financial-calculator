@@ -49,7 +49,7 @@ header {
 
 .hideError {
     opacity: 0;
-    margin-top: 64px;
+    margin-top: 64px; /*64*/
 }
 
 .input-visor {
@@ -60,7 +60,15 @@ header {
     background-color: $gray-visor !important;
     box-shadow: none; 
     padding: 6px 10px;
-    color: $gray-selector-text-050;
+    color: $charcoal-grey;
+    font-family: 'Source Sans Pro',sans-serif;
+    font-size: 16px;
+ 
+}
+
+.input-error {
+    background-color: $red-fail-020 !important;
+    color: $red-fail;       
 }
 
 .form-control::-webkit-input-placeholder, .input-total {
@@ -88,7 +96,6 @@ header {
     width: 203px;
     margin: 0 0 0 65px;
     font-family: 'Open Sans', sans-serif;
-
     
     .btn-group {
         padding-left: 0;
@@ -163,6 +170,12 @@ header {
     &:hover {
         background-color: $dodger-blue-045;
     }
+
+    &:active, &:focus {
+        background-color: $dodger-blue-055 !important;
+        outline: none !important;
+        box-shadow: none; 
+    }
 }
 
 .btn-zero {
@@ -216,12 +229,37 @@ header {
     color: $gray-selector-text-050;
     padding: 6px 10px;
     text-align: left;
+
+        .select-side {
+        position: absolute;
+        margin-left: 265px; 
+        top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        width: 7.1px;
+        height: 11.2px;
+
+            span {
+                width: 7.1px;
+                top: 4px;
+                font-size: .5em; 
+                color: $gray-selector-arrow;
+            }
+
+           
+        }
+
 }
 
 .btn-dropdown:hover, .btn-dropdown:focus, .btn-dropdown:active {
     color: $gray-selector-text-050;
     border: solid 1px $blue-box;
     cursor: text;
+    padding: 6px 9px;
+
+    .select-side { 
+        top: 7px;
+    }
 
 }
 
@@ -238,25 +276,11 @@ header {
 
      .btn-option:hover {
          background-color: $gray-li;
+         color: $blue-select;
      }
 }
 
-.select-side {
-    position: absolute;
-    margin-left: 265px; 
-    top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    width: 7.1px;
-    height: 11.2px;
 
-    span {
-        width: 7.1px;
-        top: 4px;
-        font-size: .5em; 
-        color: $gray-selector-arrow;
-    }
-}
 
 .btn-calculate {
     width: 291px;

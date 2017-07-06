@@ -15,7 +15,7 @@ class CalculatorForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps) {
+        if (this.props !== nextProps && Math.sign(nextProps.initialValue) !== -1) {
             let total = "";
             let cleanSelect, msgSelect;
             if(nextProps.initialValue && this.state.selectedValue) {
@@ -39,7 +39,6 @@ class CalculatorForm extends Component {
     }
     calculate = () => {
         //Fonte: https://www3.bcb.gov.br/CALCIDADAO/publico/exibirMetodologiaFinanciamentoPrestacoesFixas.do?method=exibirMetodologiaFinanciamentoPrestacoesFixas
-
         if(this.state.selectedValue !== "") {
             this.props.equalMethod();
         }
@@ -59,10 +58,11 @@ class CalculatorForm extends Component {
         fetch("http://192.168.25.25:5000/test", {
                 method: "POST",
                 body: JSON.stringify(objJson)
-            }).then( (d) => {
-                console.log(d);
-            }).catch( (cc) => {
-                console.log(cc);
+            }).then((ans) => {
+                console.log(ans + ": Success");
+                
+            }).catch( (err) => {
+                console.log(err+ ": There's no back end waiting");
             });
         
         e.preventDefault();
@@ -86,7 +86,6 @@ class CalculatorForm extends Component {
                 <label className="form-labels">Months<sup>*</sup></label>   
                 
                 <div className="dropdown">
-                <div className="btn-block">
                     <button className="btn btn-dropdown dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         {this.state.selectedDefault}
                         <div className="select-side">
@@ -102,19 +101,16 @@ class CalculatorForm extends Component {
                         <li className="btn-option" data-month="48_15">48 months with a rate of 15% per mo.</li>
                     </ul>
                 </div>
-                </div>
 
- 
-            
                 <button type="button" className="btn btn-calculate" onClick={this.calculate} disabled={!this.state.selectedValue}>Calculate</button>
 
                 <label className="form-labels label-total">Total</label>
 
                 <input type="text" className="form-control input-total" placeholder="R$ 0,00" value={this.state.totalDebt} readOnly="readonly"/>
-
+                
                 <button type="submit" className="btn btn-quot" disabled={!this.state.totalDebt}>Get Quot</button>
             </form>
-        
+
         </div>
 
     );

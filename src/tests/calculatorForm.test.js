@@ -8,7 +8,6 @@ test('should disable "GETQUOT" button if input total equals to R$0,00', () => {
     const calculatorForm = mount(<CalculatorForm initialValue={() => {}} />);
 
     let inputTotal = calculatorForm.find('.input-total').props().value;
-    console.log(inputTotal);
     expect(calculatorForm.find('.btn-quot').props().disabled).toEqual(true);
 });
 
