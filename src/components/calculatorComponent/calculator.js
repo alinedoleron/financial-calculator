@@ -16,7 +16,7 @@ class Calculator extends Component {
         let nextState = {};
         try {
             if(this.state.exp !== "") {
-                var value = eval(this.state.exp);
+                var value = eval(this.state.exp).toString();
                 nextState = {exp: value, 
                     clear: true, 
                     displayError: false, 
@@ -80,7 +80,6 @@ class Calculator extends Component {
                 if((this.isNumber(e.target.textContent) || e.target.textContent === "." || e.target.textContent === "(")  && this.state.clear) {
                     nextState = this.clearState();
                 }
-
                 if(nextState.exp.slice(-1) === "." && e.target.textContent === ".") {
                     return;
                 }
